@@ -14,7 +14,10 @@ async fn summarize_content(content: &str) -> Result<String, Box<dyn std::error::
         //"system": "整理一下這節目錄音文本的重點",
         "prompt": format!("整理一下這節目錄音文本的重點:\n\n{}", content),
         "options": {
-          "num_ctx": 32768
+          "num_ctx": 32768,
+          "temperature": 0.3,
+          "num_predict": -1,
+          //"top_p": 0.8,
         },
         "stream": false
       });
