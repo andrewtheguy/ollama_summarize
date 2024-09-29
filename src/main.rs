@@ -170,7 +170,7 @@ async fn summarize_content_with_streaming(content: &str) -> Result<(), Box<dyn s
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     // Collect the command-line arguments
     let args: Vec<String> = env::args().collect();
-    let stream = false;
+    let stream = true;
     
     // Check if a filename was provided as an argument
     if args.len() < 2 {
