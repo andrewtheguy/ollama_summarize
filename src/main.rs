@@ -37,7 +37,7 @@ impl Default for Options {
     fn default() -> Self {
         Options {
             num_ctx: 32768,
-            temperature: 0.0,
+            temperature: 0.2,
             num_predict: -1,
             //top_p: 0.8, // Uncomment if you want to include "top_p" as an optional field
         }
