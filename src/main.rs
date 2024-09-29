@@ -6,30 +6,18 @@ use std::env;
 use std::fs;
 use std::process;
 
-fn read_file_to_string(filename: &str) -> io::Result<String> {
-    let mut file = File::open(filename)?; // Open the file
-    let mut contents = String::new();
-    file.read_to_string(&mut contents)?; // Read the file's contents into the String
-    Ok(contents)
-}
 
-async fn summarize_content(content: &str) -> Result<Option<String>, Box<dyn std::error::Error>> {
+async fn summarize_content(content: &str) -> Result<String, Box<dyn std::error::Error>> {
     // Construct the JSON body using serde_json's `json!` macro
     let json_body = json!({
-        "model": "mistral:7b-instruct-v0.3-q8_0",
+        "model": "phi3:medium-128k",
+        //"system": "整理一下這節目錄音文本的重點",
         "prompt": format!("整理一下這節目錄音文本的重點:\n\n{}", content),
         "options": {
           "num_ctx": 32768
         },
         "stream": false
       });
-
-
-    // let resp = reqwest::post("http://localhost:11434/api/generate")
-    //     .body
-    //     .json::<HashMap<String, Value>>()
-    //     .await?;
-    // eprintln!("{resp:#?}");
 
     //eprintln!("first 100 chars of content: {}", &content[..100]);
     eprintln!("Sending request to the API...");
@@ -54,7 +42,7 @@ async fn summarize_content(content: &str) -> Result<Option<String>, Box<dyn std:
                     let done_reason = done_reason_val.as_str().unwrap();
                     if done_reason == "stop" {
                         done_properly = true;
-                        return Ok(Some(json_object.get("response").unwrap().as_str().unwrap().to_string()));
+                        return Ok(json_object.get("response").unwrap().as_str().unwrap().to_string());
                     }else{
                         eprintln!("Done reason is not stop, might not have finished properly");
                     }
@@ -69,8 +57,7 @@ async fn summarize_content(content: &str) -> Result<Option<String>, Box<dyn std:
     // Print the response JSON object
     eprintln!("Response JSON: {}", serde_json::to_string_pretty(&response_json)?);
 
-    //maybe should throw an error here
-    return Ok(None);
+    return Err("Failed to summarize".into());
 }
 
 #[tokio::main]
@@ -90,11 +77,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     // Read the file to a string and handle potential errors
     match fs::read_to_string(filename) {
         Ok(contents) => {
-            if let Some(response) = summarize_content(&contents).await? {
-                println!("{}",response);
-            }else{
-                eprintln!("No response");
-            }
+            let response = summarize_content(&contents).await?;
+            println!("{}",response);
         },
         Err(err) => {
             eprintln!("Error reading file {}: {}", filename, err);
