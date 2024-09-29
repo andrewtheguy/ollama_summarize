@@ -55,7 +55,7 @@ async fn summarize_content(content: &str) -> Result<String, Box<dyn std::error::
 
 
     // Print the response JSON object
-    eprintln!("Response JSON: {}", serde_json::to_string_pretty(&response_json)?);
+    eprintln!("Response JSON for debug: {}", serde_json::to_string_pretty(&response_json)?);
 
     return Err("Failed to summarize".into());
 }
