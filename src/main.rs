@@ -133,10 +133,10 @@ async fn summarize_content_with_streaming(content: &str) -> Result<(), Box<dyn s
     let stream_reader = tokio_util::io::StreamReader::new(stream);
 
     // Create a buffered reader to read line by line
-    let mut reader = BufReader::new(stream_reader).lines();
+    let mut lines = BufReader::new(stream_reader).lines();
 
     // Process each line
-    while let Some(line) = reader.next_line().await? {
+    while let Some(line) = lines.next_line().await? {
         if line.trim().is_empty() {
             continue; // Skip empty lines
         }
@@ -170,7 +170,7 @@ async fn summarize_content_with_streaming(content: &str) -> Result<(), Box<dyn s
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     // Collect the command-line arguments
     let args: Vec<String> = env::args().collect();
-    let stream = true;
+    let stream = false;
     
     // Check if a filename was provided as an argument
     if args.len() < 2 {
@@ -184,7 +184,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     // Read the file to a string and handle potential errors
     match fs::read_to_string(filename) {
         Ok(contents) => {
-            if(stream){
+            if stream {
                 summarize_content_with_streaming(&contents).await?;
             }else{
                 summarize_content(&contents).await?;
