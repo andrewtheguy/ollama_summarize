@@ -23,7 +23,7 @@ jobs:
 
     # Upload build artifacts (for example, `dist/` directory)
     - name: Upload artifacts
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
-        name: build-artifacts
-        path: target/release
+        #name: build-artifacts
+        path: target/release/ollama_summarize
