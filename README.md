@@ -1,3 +1,3 @@
 ```
-./target/debug/ollama_summarize file_to_summarize.txt
+ollama_summarize file_to_summarize.txt
 ```
