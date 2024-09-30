@@ -72,7 +72,8 @@ async fn summarize_content(content: &str) -> Result<(), Box<dyn std::error::Erro
     let response = client.post("http://localhost:11434/api/generate")
         .json(&request_body) // Send the JSON body
         .send()
-        .await?; // Await the response
+        .await?
+        .error_for_status()?;
 
     // Parse the response body as JSON
     let response_json: Value = response.json().await?;
@@ -120,8 +121,8 @@ async fn summarize_content_with_streaming(content: &str) -> Result<(), Box<dyn s
     let response = client.post("http://localhost:11434/api/generate")
         .json(&request_body) // Send the JSON body
         .send()
-        .await?; // Await the response
- 
+        .await?
+        .error_for_status()?;
 
     // // Make sure the response is successful
     // if !response.status().is_success() {
