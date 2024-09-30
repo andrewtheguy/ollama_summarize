@@ -78,7 +78,7 @@ async fn summarize_content(content: &str) -> Result<(), Box<dyn std::error::Erro
     // Parse the response body as JSON
     let response_json: Value = response.json().await?;
 
-    let mut done_properly = false;
+    //let mut done_properly = false;
 
     if let Some(json_object) = response_json.as_object() {
         if let Some(done) = json_object.get("done"){
@@ -86,7 +86,7 @@ async fn summarize_content(content: &str) -> Result<(), Box<dyn std::error::Erro
                 if let Some(done_reason_val) = json_object.get("done_reason"){
                     let done_reason = done_reason_val.as_str().unwrap();
                     if done_reason == "stop" {
-                        done_properly = true;
+                        //done_properly = true;
                         println!("{}",json_object.get("response").unwrap().as_str().unwrap().to_string());
                         return Ok(());
                     }else{
