@@ -167,7 +167,7 @@ async fn summarize_content_with_streaming(content: &str) -> Result<(), Box<dyn s
     return Err("Failed to summarize".into());
 }
 
-#[tokio::main]
+#[tokio::main(flavor = "current_thread")]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     // Collect the command-line arguments
     let args: Vec<String> = env::args().collect();
